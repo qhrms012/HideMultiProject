@@ -18,28 +18,22 @@ public class RunState : Istate
 
     public void Execute(Vector2 playerVector)
     {
-        if(playerVector.x < 0)
-        {
-            animator.Play("Left");
-        }
-        if(playerVector.x > 0)
-        {
-            animator.Play("Right");
-        }
-        if(playerVector.y > 0)
-        {
-            animator.Play("Up");
-        }
-        if(playerVector.y < 0)
-        {
-            animator.Play("Down");
-        }
-
-
-        if(playerVector.magnitude == 0) 
-        {
+        if (playerVector.magnitude == 0) 
+        { 
             stateMachine.SetState(new IdleState(stateMachine,animator));
+            return;
         }
+        Vector2 normalizedVector = playerVector.normalized;
+
+        if(Mathf.Abs(normalizedVector.x) > Mathf.Abs(normalizedVector.y))
+        {
+            animator.Play(normalizedVector.x > 0 ? "Right" : "Left");
+        }
+        else
+        {
+            animator.Play(normalizedVector.y > 0 ? "Up" : "Down");
+        }
+
     }
 
     public void Exit()
