@@ -13,11 +13,29 @@ public class RunState : Istate
 
     public void Enter()
     {
-        animator.Play("Run");
+
     }
 
     public void Execute(Vector2 playerVector)
     {
+        if(playerVector.x < 0)
+        {
+            animator.Play("Left");
+        }
+        if(playerVector.x > 0)
+        {
+            animator.Play("Right");
+        }
+        if(playerVector.y > 0)
+        {
+            animator.Play("Up");
+        }
+        if(playerVector.y < 0)
+        {
+            animator.Play("Down");
+        }
+
+
         if(playerVector.magnitude == 0) 
         {
             stateMachine.SetState(new IdleState(stateMachine,animator));
