@@ -7,8 +7,14 @@ public class Spawn : MonoBehaviour
     private void Start()
     {
         Vector3 spawnAreaCenter = new Vector3(0,0,0);
-        Vector3 spawnAreaSize = new Vector3(10,10,0);
-        SpawnObjectAtPosition("AI", spawnAreaCenter, spawnAreaSize);
+        Vector3 spawnAreaSize = new Vector3(23,30,0);
+        int spawnCount = 50;
+        for ( int i = 0;  i < spawnCount; i++)
+        {
+            SpawnObjectAtPosition("AI", spawnAreaCenter, spawnAreaSize);
+            SpawnObjectAtPosition("Coin", spawnAreaCenter, spawnAreaSize);
+        }
+        
     }
 
     public GameObject SpawnObjectAtPosition(string poolName, Vector3 areaCenter, Vector3 areaSize)
@@ -42,7 +48,7 @@ public class Spawn : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(10, 10, 0)); // 필요 시 수정
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(23, 30, 0)); // 필요 시 수정
     }
 }
 
