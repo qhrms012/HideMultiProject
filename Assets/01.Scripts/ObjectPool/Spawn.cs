@@ -4,23 +4,6 @@ public class Spawn : MonoBehaviour
 {
     public ObjectPoolManager poolManager;
 
-    private void Awake()
-    {
-        Debug.Log("Awake called");
-        if (poolManager == null)
-        {
-            Debug.LogError("PoolManager is not assigned!");
-        }
-        else if (poolManager.GetObject("AI") == null)
-        {
-            Debug.Log("Object not found in the pool.");
-        }
-        else
-        {
-            Debug.Log("Object found in the pool.");
-        }
-    }
-
     private void Start()
     {
         Vector3 spawnAreaCenter = new Vector3(0,0,0);
