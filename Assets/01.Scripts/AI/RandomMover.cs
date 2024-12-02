@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class RandomMover : MonoBehaviour
 {
@@ -8,37 +9,59 @@ public class RandomMover : MonoBehaviour
     private Animator animator;
     private StateMachine stateMachine;
 
+    private bool isMoving = false; // 움직이는 상태 여부
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         stateMachine = new StateMachine();
-
-        // 기본 상태 설정 (IdleState 또는 적절한 상태)
         stateMachine.SetState(new IdleState(stateMachine, animator));
     }
 
     private void Start()
     {
-        SetRandomDirection();
-        InvokeRepeating(nameof(SetRandomDirection), 5f, 5f); // 2초마다 랜덤 방향 갱신
+        StartCoroutine(MoveAndPauseRoutine());
+    }
+
+    private IEnumerator MoveAndPauseRoutine()
+    {
+        while (true)
+        {
+            // 움직임 시작
+            SetRandomDirection();
+            isMoving = true;
+            yield return new WaitForSeconds(Random.Range(2f, 5f)); // 2 ~ 5초 동안 이동
+
+            // 움직임 멈춤
+            isMoving = false;
+            moveDirection = Vector2.zero; // 이동 방향 초기화
+            yield return new WaitForSeconds(Random.Range(1f, 3f)); // 1 ~ 3초 동안 대기
+        }
     }
 
     private void SetRandomDirection()
     {
-        // 랜덤 방향 설정
+        // 랜덤한 방향 설정
         float randomAngle = Random.Range(0f, 360f);
         moveDirection = new Vector2(Mathf.Cos(randomAngle), Mathf.Sin(randomAngle));
     }
 
     private void Update()
     {
-        stateMachine.Update(moveDirection); // 방향 전달
+        // 이동 중일 때만 StateMachine 업데이트
+        if (isMoving)
+        {
+            stateMachine.Update(moveDirection);
+        }
     }
 
     private void FixedUpdate()
     {
-        Vector2 movement = moveDirection.normalized * moveSpeed * Time.fixedDeltaTime;
-        rb.MovePosition(rb.position + movement);
+        if (isMoving)
+        {
+            Vector2 movement = moveDirection.normalized * moveSpeed * Time.fixedDeltaTime;
+            rb.MovePosition(rb.position + movement);
+        }
     }
 }
