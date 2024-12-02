@@ -37,11 +37,5 @@ public class Player : MonoBehaviour
         Vector2 movement = playerVector.normalized * playerSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + movement);
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
 
 }
