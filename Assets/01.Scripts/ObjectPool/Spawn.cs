@@ -3,6 +3,7 @@ using UnityEngine;
 public class Spawn : MonoBehaviour
 {
     public ObjectPoolManager poolManager;
+    public UIManager uimanager;
 
     private void Start()
     {
