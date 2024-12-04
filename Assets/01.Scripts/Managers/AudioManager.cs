@@ -82,6 +82,17 @@ public class AudioManager : Singleton<AudioManager>
 
 
     }
+    public void PlayBgm(bool isPlay)
+    {
+        if (isPlay)
+        {
+            bgmPlayer.Play();
+        }
+        else
+        {
+            bgmPlayer.Stop();
+        }
+    }
     public void SetBgmVolume(float volume)
     {
         bgmVolume = volume;
