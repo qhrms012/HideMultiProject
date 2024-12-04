@@ -22,6 +22,7 @@ public class AudioManager : Singleton<AudioManager>
     public enum Sfx
     {
         Sensor,
+        Coin,
         Dead,
         Lose,
         Win

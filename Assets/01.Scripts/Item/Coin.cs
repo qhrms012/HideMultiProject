@@ -17,6 +17,7 @@ public class Coin : MonoBehaviour , ISubject
     {
         if (collision.CompareTag("Player"))
         {
+            AudioManager.Instance.PlaySfx(AudioManager.Sfx.Coin);
             gameObject.SetActive(false);
             NotifyObservers(); // 코인 비활성화 시 알림
             Debug.Log("부서짐");
