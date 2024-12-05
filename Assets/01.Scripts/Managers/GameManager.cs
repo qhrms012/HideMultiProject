@@ -7,5 +7,9 @@ public class GameManager : Singleton<GameManager>
     {
         AudioManager.Instance.PlayBgm(true);
     }
-
+    
+    public void GameQuit()
+    {
+        Application.Quit();
+    }
 }
