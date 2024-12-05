@@ -80,6 +80,20 @@ public class AudioManager : Singleton<AudioManager>
 
 
     }
+    public void StopSfx(Sfx sfx)
+    {
+        foreach (AudioSource sfxPlayer in sfxPlayers)
+        {
+
+            if (sfxPlayer.isPlaying && sfxPlayer.clip == sfxClip[(int)sfx])
+            {
+                sfxPlayer.Stop();
+                break;
+            }
+
+        }
+    }
+
     public void PlayBgm(bool isPlay)
     {
         if (isPlay && bgmClip.Length > 0)
