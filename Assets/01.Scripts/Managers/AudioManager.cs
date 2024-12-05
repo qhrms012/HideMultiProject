@@ -5,10 +5,10 @@ public class AudioManager : Singleton<AudioManager>
 {
 
     [Header("BGM")]
-    public AudioClip bgmClip;
-    public float bgmVolume;
-    AudioSource bgmPlayer;
-    AudioHighPassFilter bgmHighPassFilter;
+    public AudioClip[] bgmClip;
+    public float bgmVolume = 1.0f;
+    private AudioSource bgmPlayer;
+    private int bgmClipIndex = 0;  // 현재 재생 중인 클립 인덱스
     [SerializeField] private AudioMixerGroup bgmAudioMixerGroup;
 
     [Header("SFX")]
@@ -39,11 +39,8 @@ public class AudioManager : Singleton<AudioManager>
         bgmObject.transform.parent = transform;
         bgmPlayer = bgmObject.AddComponent<AudioSource>();
         bgmPlayer.playOnAwake = false;
-        bgmPlayer.loop = true;
         bgmPlayer.volume = bgmVolume;
-        bgmPlayer.clip = bgmClip;
-        bgmHighPassFilter = Camera.main.GetComponent<AudioHighPassFilter>();
-        bgmPlayer.outputAudioMixerGroup = bgmAudioMixerGroup; // BGM 오디오 믹서 그룹 연결
+        bgmPlayer.outputAudioMixerGroup = bgmAudioMixerGroup;
 
         //효과음 플레이어 초기화
         GameObject sfxObject = new GameObject("SfxPlayer");
@@ -85,14 +82,31 @@ public class AudioManager : Singleton<AudioManager>
     }
     public void PlayBgm(bool isPlay)
     {
-        if (isPlay)
+        if (isPlay && bgmClip.Length > 0)
         {
-            bgmPlayer.Play();
+            bgmClipIndex = 0; // 첫 번째 클립부터 시작
+            PlayCurrentBgm();
         }
         else
         {
             bgmPlayer.Stop();
         }
+    }
+    private void PlayCurrentBgm()
+    {
+        if (bgmClip.Length == 0) return;
+
+        bgmPlayer.clip = bgmClip[bgmClipIndex];
+        bgmPlayer.Play();
+
+        // 현재 클립이 끝나면 다음 클립 재생
+        Invoke(nameof(PlayNextBgm), bgmPlayer.clip.length);
+    }
+
+    private void PlayNextBgm()
+    {
+        bgmClipIndex = (bgmClipIndex + 1) % bgmClip.Length; // 다음 클립 인덱스 계산
+        PlayCurrentBgm();
     }
     public void SetBgmVolume(float volume)
     {
