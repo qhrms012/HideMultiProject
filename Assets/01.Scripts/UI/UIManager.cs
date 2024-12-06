@@ -6,7 +6,6 @@ public class UIManager : MonoBehaviour
     public static UIManager Instance { get; private set; }
 
     public TextMeshProUGUI coinText;
-    private int coinCount = 0;
 
     private void Awake()
     {
@@ -22,7 +21,7 @@ public class UIManager : MonoBehaviour
 
     public void UpdateCoinUI()
     {
-        coinCount++;
-        coinText.text = coinCount.ToString();
+        GameManager.Instance.coinCount++;
+        coinText.text = GameManager.Instance.coinCount.ToString();
     }
 }
