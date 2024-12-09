@@ -14,6 +14,8 @@ public class ExitObject : MonoBehaviour
             }
             else
             {
+                AudioManager.Instance.PlayBgm(false);
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
                 UIManager.Instance.winObject.SetActive(true);
             }
             
