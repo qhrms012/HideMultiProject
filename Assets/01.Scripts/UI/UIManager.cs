@@ -1,31 +1,14 @@
 using TMPro;
 using UnityEngine;
 
-public class UIManager : MonoBehaviour
+public class UIManager : Singleton<UIManager>
 {
-    public static UIManager Instance { get; private set; }
 
     public TextMeshProUGUI coinText;
-    [SerializeField]
-    private GameObject winObject;
-    [SerializeField]
-    private GameObject loseObject;
-    [SerializeField]
-    private GameObject coinObject;
-    [SerializeField]
-    private TextMeshProUGUI coinShortAgeText;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+    public GameObject winObject;
+    public GameObject loseObject;
+    public GameObject coinObject;
+    public TextMeshProUGUI coinShortAgeText;
 
     public void UpdateCoinUI()
     {
@@ -35,7 +18,7 @@ public class UIManager : MonoBehaviour
     public void UpdateCoinShortAgeUI()
     {
         int Coinsa = GameManager.Instance.Coincount - 50;
-        coinShortAgeText.text = Coinsa.ToString();
+        coinShortAgeText.text = $"코인이 {Coinsa} 만큼 부족합니다.";
     }
 
     private void LateUpdate()
