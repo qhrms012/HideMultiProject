@@ -8,7 +8,10 @@ public class UIManager : Singleton<UIManager>
     public GameObject winObject;
     public GameObject loseObject;
     public GameObject coinObject;
+    public GameObject warningObject;
+    public TextMeshProUGUI warningText;
     public TextMeshProUGUI coinShortAgeText;
+
 
     public void UpdateCoinUI()
     {
