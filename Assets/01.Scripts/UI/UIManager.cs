@@ -18,7 +18,7 @@ public class UIManager : Singleton<UIManager>
     public void UpdateCoinShortAgeUI()
     {
         int Coinsa = GameManager.Instance.Coincount - 50;
-        coinShortAgeText.text = $"코인이 {Coinsa} 만큼 부족합니다.";
+        coinShortAgeText.text = $"코인이 {Mathf.Abs(Coinsa)} 만큼 부족합니다.";
     }
 
     private void LateUpdate()
