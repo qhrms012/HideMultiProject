@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    public int coinCount;
+    public int Coincount;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -13,5 +13,6 @@ public class GameManager : Singleton<GameManager>
     {
         Application.Quit();
     }
+
 
 }
