@@ -25,7 +25,8 @@ public class AudioManager : Singleton<AudioManager>
         Coin,
         Dead,
         Lose,
-        Win
+        Win,
+        Popup
     }
 
     private void Awake()

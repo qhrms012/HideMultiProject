@@ -13,6 +13,7 @@ public class Sensor : MonoBehaviour
             if (!inSensor)
             {
                 inSensor = true;
+                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Popup);
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.Sensor);
                 warningCoroutine = StartCoroutine(OnWarningUI());
             }
