@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Animator animator;
     private StateMachine stateMachine;
 
-
+    private float dieTime;
     private bool isDead = false;
     private bool isHit = false;
 
@@ -18,6 +18,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         stateMachine = new StateMachine();
         stateMachine.SetState(new IdleState(stateMachine, animator));
     }
@@ -30,12 +31,45 @@ public class Player : MonoBehaviour
     private void Update() 
     {
         stateMachine.Update(playerVector);
+        if (isHit)
+        {
+            dieTime += Time.deltaTime;
+
+            if (dieTime >= 5f && !isDead)
+            {
+                isDead = true;
+                playerSpeed = 0;
+                gameObject.SetActive(false);
+                UIManager.Instance.loseObject.SetActive(true);
+            }
+        }
+
     }
 
     private void FixedUpdate()
     {        
         Vector2 movement = playerVector.normalized * playerSpeed * Time.fixedDeltaTime;
         rb.MovePosition(rb.position + movement);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy") && CompareTag("Player"))
+        {
+            isHit = true;
+            spriteRenderer.color = Color.red;
+            UIManager.Instance.warningText.text = "적에게 닿고 있습니다.";
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (CompareTag("Player"))
+        {
+            isHit = false;
+            spriteRenderer.color = Color.white;
+            UIManager.Instance.warningText.text = "적이 근처에 있습니다.";
+        }
     }
 
 }
