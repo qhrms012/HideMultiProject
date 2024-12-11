@@ -8,13 +8,17 @@ public class RandomMover : MonoBehaviour
     private Rigidbody2D rb;
     private Animator animator;
     private StateMachine stateMachine;
+    private SpriteRenderer spriteRenderer;
 
+    private float dieTime;
     private bool isMoving = false; // 움직이는 상태 여부
+    private bool isHit = false;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
         stateMachine = new StateMachine();
         stateMachine.SetState(new IdleState(stateMachine, animator));
     }
@@ -54,8 +58,36 @@ public class RandomMover : MonoBehaviour
         {
             stateMachine.Update(moveDirection);
         }
+
+        if (isHit)
+        {
+            dieTime += Time.deltaTime;
+
+            if(dieTime >= 5f && isHit)
+            {
+                gameObject.SetActive(false);
+            }
+
+        }
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isHit = true;
+            spriteRenderer.color = Color.red;
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            isHit = false;
+            spriteRenderer.color = Color.white;
+        }
+    }
     private void FixedUpdate()
     {
         if (isMoving)
