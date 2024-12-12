@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
 
     public float dieTime;
     private bool isDead = false;
-    private bool isHit = false;
+    public bool isHit = false;
 
     private void Awake()
     {

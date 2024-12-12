@@ -11,6 +11,7 @@ public class UIManager : Singleton<UIManager>
     public GameObject warningObject;
     public TextMeshProUGUI warningText;
     public TextMeshProUGUI coinShortAgeText;
+    public TextMeshProUGUI playerDieTime;
 
 
     public void UpdateCoinUI()
@@ -24,6 +25,21 @@ public class UIManager : Singleton<UIManager>
         coinShortAgeText.text = $"코인이 {Mathf.Abs(Coinsa)} 만큼 부족합니다.";
     }
 
+    public void UpdatePlayerDieTime()
+    {
+        int seconds = Mathf.FloorToInt(GameManager.Instance.player.dieTime);
+        float decimals = (GameManager.Instance.player.dieTime % 1f) * 100;
+        playerDieTime.text = string.Format("{0:00} : {1:00}",seconds,Mathf.FloorToInt(decimals));
+    }
+    private void Update()
+    {
+        if (GameManager.Instance.player.isHit) 
+        {
+            UpdatePlayerDieTime();
+        }
+
+        
+    }
     private void LateUpdate()
     {
         UpdateCoinShortAgeUI();

@@ -3,12 +3,13 @@ using UnityEngine;
 
 public class GameManager : Singleton<GameManager>
 {
-    private Player player;
+    public Player player;
     private bool isDead = false;
     public int Coincount;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Application.targetFrameRate = 60;
         AudioManager.Instance.PlayBgm(true);
     }
 
