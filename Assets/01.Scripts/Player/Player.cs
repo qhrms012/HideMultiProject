@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     private Animator animator;
     private StateMachine stateMachine;
 
-    private float dieTime;
+    public float dieTime;
     private bool isDead = false;
     private bool isHit = false;
 
@@ -34,14 +34,6 @@ public class Player : MonoBehaviour
         if (isHit)
         {
             dieTime += Time.deltaTime;
-
-            if (dieTime >= 5f && !isDead)
-            {
-                isDead = true;
-                playerSpeed = 0;
-                gameObject.SetActive(false);
-                UIManager.Instance.loseObject.SetActive(true);
-            }
         }
 
     }
