@@ -20,6 +20,7 @@ public class GameManager : Singleton<GameManager>
         {
             DiePlayer();
         }
+
     }
     private void DiePlayer()
     {
@@ -28,6 +29,7 @@ public class GameManager : Singleton<GameManager>
         player.gameObject.SetActive(false);
         UIManager.Instance.loseObject.SetActive(true);
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
+        player.dieTime = 0;
     }
     public void GameQuit()
     {
