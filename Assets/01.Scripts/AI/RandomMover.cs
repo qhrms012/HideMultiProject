@@ -53,6 +53,10 @@ public class RandomMover : MonoBehaviour
 
     private void Update()
     {
+        if (!isMoving)
+        {
+            stateMachine.SetState(new IdleState(stateMachine, animator));
+        }
         // 이동 중일 때만 StateMachine 업데이트
         if (isMoving)
         {
