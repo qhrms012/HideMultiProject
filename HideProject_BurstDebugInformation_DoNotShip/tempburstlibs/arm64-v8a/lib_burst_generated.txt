@@ -10,9 +10,16 @@ Library: E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Mono.Security;
 --assembly-defines=mscorlib;
+--assembly-defines=Photon3Unity3D;
+--assembly-defines=PhotonChat;
+--assembly-defines=PhotonRealtime;
+--assembly-defines=PhotonUnityNetworking.Demos;
+--assembly-defines=PhotonUnityNetworking;
+--assembly-defines=PhotonUnityNetworking.Utilities;
 --assembly-defines=System.Configuration;
 --assembly-defines=System.Core;
 --assembly-defines=System;
+--assembly-defines=System.Numerics;
 --assembly-defines=System.Xml;
 --assembly-defines=Unity.2D.Animation.Runtime;
 --assembly-defines=Unity.2D.Tilemap.Extras;
@@ -29,6 +36,7 @@ Library: E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=E:\Unity\GitHub\HideMultiProject\Temp\Burst
+--debug=Full
 --key-folder=E:/Unity/2022.3.21f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=E:\Unity\GitHub\HideMultiProject\Library\Burst
 --output=E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated
@@ -48,6 +56,7 @@ Library: E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v
 --method=Unity.Jobs.IJobExtensions+JobStruct`1[[UnityEngine.Rendering.Universal.DecalCreateDrawCallSystem+DrawCallJob, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.Rendering.Universal.DecalCreateDrawCallSystem+DrawCallJob&, Unity.RenderPipelines.Universal.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--aa309157da5950aa53ed6075709e6e40
 --method=Unity.Collections.AllocatorManager+SlabAllocator, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Try(System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Collections.AllocatorManager+Block&, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null)--2434a4c10d01dbab5e7438b2b580d1d1
 --method=Unity.Collections.AllocatorManager+StackAllocator, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Try(System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Collections.AllocatorManager+Block&, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null)--478bf3abafa12cba2083fb45bca79b9c
+--method=Unity.Jobs.IJobExtensions+JobStruct`1[[Unity.Collections.LowLevel.Unsafe.UnsafeHashMapDataDisposeJob, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(Unity.Collections.LowLevel.Unsafe.UnsafeHashMapDataDisposeJob&, Unity.Collections, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--2ef0a503423574beae197ba4b01ed0be
 --method=Unity.Jobs.IJobExtensions+JobStruct`1[[UnityEngine.U2D.Animation.FillPerSkinJobSingleThread, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.U2D.Animation.FillPerSkinJobSingleThread&, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--7194d9a68a20c1c6a01d3a365d4f21b9
 --method=UnityEngine.Jobs.IJobParallelForTransformExtensions+TransformParallelForLoopStruct`1[[UnityEngine.U2D.Animation.LocalToWorldTransformAccessJob, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.U2D.Animation.LocalToWorldTransformAccessJob&, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--f9554e48e09171c93d417c182c09c36b
 --method=Unity.Jobs.IJobParallelForExtensions+ParallelForJobStruct`1[[UnityEngine.U2D.Animation.BoneDeformBatchedJob, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null]], UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::Execute(UnityEngine.U2D.Animation.BoneDeformBatchedJob&, Unity.2D.Animation.Runtime, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|System.IntPtr, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089|Unity.Jobs.LowLevel.Unsafe.JobRanges&, UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null|System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089)--6d933222c5b0c0c915d062861958d408
@@ -68,9 +77,16 @@ Library: E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v
 --assembly-defines=Assembly-CSharp;
 --assembly-defines=Mono.Security;
 --assembly-defines=mscorlib;
+--assembly-defines=Photon3Unity3D;
+--assembly-defines=PhotonChat;
+--assembly-defines=PhotonRealtime;
+--assembly-defines=PhotonUnityNetworking.Demos;
+--assembly-defines=PhotonUnityNetworking;
+--assembly-defines=PhotonUnityNetworking.Utilities;
 --assembly-defines=System.Configuration;
 --assembly-defines=System.Core;
 --assembly-defines=System;
+--assembly-defines=System.Numerics;
 --assembly-defines=System.Xml;
 --assembly-defines=Unity.2D.Animation.Runtime;
 --assembly-defines=Unity.2D.Tilemap.Extras;
@@ -87,6 +103,7 @@ Library: E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v
 --assembly-defines=UnityEngine;
 --generate-link-xml=Temp\burst.link.xml
 --temp-folder=E:\Unity\GitHub\HideMultiProject\Temp\Burst
+--debug=Full
 --key-folder=E:/Unity/2022.3.21f1/Editor/Data/PlaybackEngines/AndroidPlayer
 --decode-folder=E:\Unity\GitHub\HideMultiProject\Library\Burst
 --output=E:\Unity\GitHub\HideMultiProject\Temp\BurstOutput\tempburstlibs\arm64-v8a\lib_burst_generated

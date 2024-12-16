@@ -84,7 +84,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
     #region 서버연결
-    void Awake() => Screen.SetResolution(960, 540, false);
+    //void Awake() => Screen.SetResolution(960, 540, false);
 
     void Update()
     {
