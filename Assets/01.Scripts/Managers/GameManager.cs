@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -35,6 +36,4 @@ public class GameManager : Singleton<GameManager>
     {
         Application.Quit();
     }
-
-
 }
