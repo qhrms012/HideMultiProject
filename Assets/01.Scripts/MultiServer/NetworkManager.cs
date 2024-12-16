@@ -5,30 +5,31 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
     [Header("DisconnectPanel")]
-    public InputField NickNameInput;
+    public TMP_InputField NickNameInput;
 
     [Header("LobbyPanel")]
     public GameObject LobbyPanel;
-    public InputField RoomInput;
-    public Text WelcomeText;
-    public Text LobbyInfoText;
+    public TMP_InputField RoomInput;
+    public TextMeshProUGUI WelcomeText;
+    public TextMeshProUGUI LobbyInfoText;
     public Button[] CellBtn;
     public Button PreviousBtn;
     public Button NextBtn;
 
     [Header("RoomPanel")]
     public GameObject RoomPanel;
-    public Text ListText;
-    public Text RoomInfoText;
-    public Text[] ChatText;
-    public InputField ChatInput;
+    public TextMeshProUGUI ListText;
+    public TextMeshProUGUI RoomInfoText;
+    public TextMeshProUGUI[] ChatText;
+    public TMP_InputField ChatInput;
 
     [Header("ETC")]
-    public Text StatusText;
+    public TextMeshProUGUI StatusText;
     public PhotonView PV;
 
     List<RoomInfo> myList = new List<RoomInfo>();
@@ -60,8 +61,8 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         for (int i = 0; i < CellBtn.Length; i++)
         {
             CellBtn[i].interactable = (multiple + i < myList.Count) ? true : false;
-            CellBtn[i].transform.GetChild(0).GetComponent<Text>().text = (multiple + i < myList.Count) ? myList[multiple + i].Name : "";
-            CellBtn[i].transform.GetChild(1).GetComponent<Text>().text = (multiple + i < myList.Count) ? myList[multiple + i].PlayerCount + "/" + myList[multiple + i].MaxPlayers : "";
+            CellBtn[i].transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = (multiple + i < myList.Count) ? myList[multiple + i].Name : "";
+            CellBtn[i].transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = (multiple + i < myList.Count) ? myList[multiple + i].PlayerCount + "/" + myList[multiple + i].MaxPlayers : "";
         }
     }
 
