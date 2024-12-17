@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class ObjectPoolManager : MonoBehaviour
+public class ObjectPoolManager : MonoBehaviourPunCallbacks, IPunPrefabPool
 {
     [System.Serializable]
     public class Pool
@@ -16,6 +17,9 @@ public class ObjectPoolManager : MonoBehaviour
 
     private void Awake()
     {
+        // Photon의 Custom Pool 설정
+        PhotonNetwork.PrefabPool = this;
+
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
         // 각 풀 초기화
@@ -34,7 +38,40 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 
-    // 오브젝트 가져오기
+    // Photon이 요청할 때 사용할 Instantiate
+    public GameObject Instantiate(string prefabId, Vector3 position, Quaternion rotation)
+    {
+        if (poolDictionary.ContainsKey(prefabId) && poolDictionary[prefabId].Count > 0)
+        {
+            GameObject obj = poolDictionary[prefabId].Dequeue();
+            obj.transform.position = position;
+            obj.transform.rotation = rotation;
+            obj.SetActive(true);
+            return obj;
+        }
+
+        Debug.LogWarning($"Pool '{prefabId}' does not exist or is empty! Creating new instance.");
+        GameObject newObj = Instantiate(Resources.Load<GameObject>(prefabId), position, rotation);
+        return newObj;
+    }
+
+    // Photon이 오브젝트를 반환할 때 사용할 Destroy
+    public void Destroy(GameObject gameObject)
+    {
+        string poolName = gameObject.name.Replace("(Clone)", "").Trim();
+
+        if (poolDictionary.ContainsKey(poolName))
+        {
+            gameObject.SetActive(false);
+            poolDictionary[poolName].Enqueue(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    // 오브젝트를 가져오는 메서드 (일반 풀링)
     public GameObject GetObject(string poolName)
     {
         if (poolDictionary.ContainsKey(poolName) && poolDictionary[poolName].Count > 0)
@@ -58,4 +95,3 @@ public class ObjectPoolManager : MonoBehaviour
         }
     }
 }
-

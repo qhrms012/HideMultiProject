@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Spawn : MonoBehaviour
 {
-    public ObjectPoolManager poolManager;
+    //public ObjectPoolManager poolManager;
     public UIManager uimanager;
 
     private void Start()
@@ -19,23 +19,25 @@ public class Spawn : MonoBehaviour
         
     }
 
-    public GameObject SpawnObjectAtPosition(string poolName, Vector3 areaCenter, Vector3 areaSize)
+    public void SpawnObjectAtPosition(string prefabName, Vector3 areaCenter, Vector3 areaSize)
     {
-        GameObject obj = poolManager.GetObject(poolName);
-        if (obj != null)
-        {
-            // 랜덤 위치 계산
-            Vector3 randomPosition = new Vector3(
-                Random.Range(areaCenter.x - areaSize.x / 2, areaCenter.x + areaSize.x / 2),
-                Random.Range(areaCenter.y - areaSize.y / 2, areaCenter.y + areaSize.y / 2),
-                areaCenter.z // 2D 게임이라면 Z는 고정
-            );
+        // 랜덤 위치 계산
+        Vector3 randomPosition = new Vector3(
+            Random.Range(areaCenter.x - areaSize.x / 2, areaCenter.x + areaSize.x / 2),
+            Random.Range(areaCenter.y - areaSize.y / 2, areaCenter.y + areaSize.y / 2),
+            areaCenter.z // 2D 게임이라면 Z는 고정
+        );
 
-            // 오브젝트 위치와 회전 설정
-            obj.transform.position = randomPosition;
-            obj.transform.rotation = Quaternion.identity; // 필요하면 특정 회전값 지정
+        // PhotonNetwork를 통해 오브젝트 생성
+        if (PhotonNetwork.IsMasterClient) // MasterClient만 소환하도록 조건 추가
+        {
+            GameObject obj = PhotonNetwork.Instantiate(prefabName, randomPosition, Quaternion.identity);
+            Debug.Log($"{prefabName} 소환됨: 위치 {randomPosition}");
         }
-        return obj;
+        else
+        {
+            Debug.LogWarning("SpawnObjectAtPosition: MasterClient만 객체를 소환할 수 있습니다.");
+        }
     }
 
     // 디버깅용 소환 영역 표시
