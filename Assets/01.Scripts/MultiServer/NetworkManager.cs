@@ -6,6 +6,7 @@ using Photon.Realtime;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Photon.Pun.UtilityScripts;
 
 public class NetworkManager : MonoBehaviourPunCallbacks
 {
@@ -34,8 +35,6 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     List<RoomInfo> myList = new List<RoomInfo>();
     int currentPage = 1, maxPage, multiple;
-
-
 
     void Start()
     {
@@ -142,7 +141,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        base.OnPlayerEnteredRoom(newPlayer);    
+        base.OnPlayerEnteredRoom(newPlayer);
         RoomRenewal();
         ChatRPC("<color=yellow>" + newPlayer.NickName + "´ÔÀÌ Âü°¡ÇÏ¼Ì½À´Ï´Ù</color>");
     }

@@ -1,3 +1,4 @@
+using Photon.Pun;
 using UnityEngine;
 
 public class Spawn : MonoBehaviour
@@ -35,14 +36,6 @@ public class Spawn : MonoBehaviour
             obj.transform.rotation = Quaternion.identity; // 필요하면 특정 회전값 지정
         }
         return obj;
-    }
-    // 여러 오브젝트 소환
-    public void SpawnMultipleObjects(string poolName, Vector3 areaCenter, Vector3 areaSize, int objectCount)
-    {
-        for (int i = 0; i < objectCount; i++)
-        {
-            SpawnObjectAtPosition(poolName, areaCenter, areaSize);
-        }
     }
 
     // 디버깅용 소환 영역 표시
