@@ -40,11 +40,11 @@ public class GameManager : MonoBehaviourPunCallbacks
         // ActorNumber로 역할 분배: 1번 플레이어는 Player, 2번 플레이어는 Enemy
         if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
         {
-            PhotonNetwork.Instantiate("Player", Vector3.zero, Quaternion.identity);
+            PhotonNetwork.Instantiate("Player", new Vector3(0, 0, -10), Quaternion.identity);
         }
         else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
         {
-            PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, 0), Quaternion.identity);
+            PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, -10), Quaternion.identity);
         }
     }
 
