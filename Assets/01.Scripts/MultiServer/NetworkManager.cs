@@ -37,6 +37,12 @@ public class NetworkManager : MonoBehaviourPunCallbacks
 
 
 
+    void Start()
+    {
+        PhotonNetwork.AutomaticallySyncScene = true;
+    }
+
+
     #region 방리스트 갱신
     // ◀버튼 -2 , ▶버튼 -1 , 셀 숫자
     public void MyListClick(int num)
@@ -184,8 +190,9 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     }
     #endregion
 
+    [PunRPC]
     public void GameStart()
     {
-        SceneManager.LoadScene("MainScene");
+        PhotonNetwork.LoadLevel("MainScene");
     }
 }
