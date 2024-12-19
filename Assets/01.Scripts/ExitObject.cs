@@ -13,21 +13,9 @@ public class ExitObject : MonoBehaviourPunCallbacks
             {
                 UIManager.Instance.coinObject.SetActive(true);
             }
-            else if(GameManager.Instance.Coincount >= 50)
+            else
             {
-                if(PhotonNetwork.LocalPlayer.ActorNumber == 1 &&
-                    PhotonNetwork.LocalPlayer.ActorNumber == 3 &&
-                    PhotonNetwork.LocalPlayer.ActorNumber == 4)
-                {
-                    AudioManager.Instance.PlayBgm(false);
-                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
-                    UIManager.Instance.winObject.SetActive(true);
-                }
-                else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
-                {
-                    GameManager.Instance.LosePlayer();
-                }
-                
+                GameManager.Instance.HandleGameEnd(true);
             }
             
         }

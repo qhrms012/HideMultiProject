@@ -63,21 +63,26 @@ public class GameManager : MonoBehaviourPunCallbacks
         UpdateDieTime(player.dieTime);
         if (player.dieTime >= 5f && !isDead)
         {
-            
-            if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
-            {
-                DiePlayer();
-            }
-            else if(PhotonNetwork.LocalPlayer.ActorNumber == 2)
-            {
-                WinPlayer();
-            }
-                
+            HandleGameEnd(false);
         }
 
     }
 
-    private void DiePlayer()
+    public void HandleGameEnd(bool isWin)
+    {
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+
+        if ((actorNumber == 1 || actorNumber == 3 || actorNumber == 4) == isWin)
+        {
+            WinPlayer();
+        }
+        else
+        {
+            LosePlayer();
+        }
+    }
+
+    public void LosePlayer()
     {
         isDead = true;
         player.playerSpeed = 0;
@@ -86,14 +91,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         UIManager.Instance.loseObject.SetActive(true);
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
         player.dieTime = 0;
-    }
-
-    public void LosePlayer()
-    {
-        player.gameObject.SetActive(false);
-        AudioManager.Instance.PlayBgm(false);
-        UIManager.Instance.loseObject.SetActive(true);
-        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
     }
 
     public void WinPlayer()
