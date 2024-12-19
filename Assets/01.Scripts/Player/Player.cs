@@ -52,9 +52,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        isHit = true;
         if (collision.gameObject.CompareTag("Enemy") && CompareTag("Player"))
         {
-            isHit = true;
+            
             spriteRenderer.color = Color.red;
             UIManager.Instance.warningText.text = "적에게 닿고 있습니다.";
         }
@@ -62,9 +63,10 @@ public class Player : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        isHit = false;
         if (CompareTag("Player"))
         {
-            isHit = false;
+            
             spriteRenderer.color = Color.white;
             UIManager.Instance.warningText.text = "적이 근처에 있습니다.";
         }

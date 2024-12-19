@@ -7,7 +7,8 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance = null;
-
+    private PhotonView pv;
+    
     public Player player;
     private bool isDead = false;
     public int Coincount;
@@ -31,6 +32,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 60;
         AudioManager.Instance.PlayBgm(true);
         player = FindAnyObjectByType<Player>();
+        pv = GetComponent<PhotonView>();
     }
 
 
@@ -46,24 +48,61 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, -10), Quaternion.identity);
         }
+        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+        {
+            PhotonNetwork.Instantiate("Player", new Vector3(0, 3, -10), Quaternion.identity);
+        }
+        else if (PhotonNetwork.LocalPlayer.ActorNumber == 4)
+        {
+            PhotonNetwork.Instantiate("Player", new Vector3(3, 3, -10), Quaternion.identity);
+        }
     }
 
     private void Update()
     {
-
+        UpdateDieTime(player.dieTime);
         if (player.dieTime >= 5f && !isDead)
         {
-            DiePlayer();
+            
+            if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+            {
+                DiePlayer();
+            }
+            else if(PhotonNetwork.LocalPlayer.ActorNumber == 2)
+            {
+                WinPlayer();
+            }
+                
         }
 
     }
+
     private void DiePlayer()
     {
         isDead = true;
         player.playerSpeed = 0;
         player.gameObject.SetActive(false);
+        AudioManager.Instance.PlayBgm(false);
         UIManager.Instance.loseObject.SetActive(true);
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
+        player.dieTime = 0;
+    }
+
+    public void LosePlayer()
+    {
+        player.gameObject.SetActive(false);
+        AudioManager.Instance.PlayBgm(false);
+        UIManager.Instance.loseObject.SetActive(true);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
+    }
+
+    public void WinPlayer()
+    {
+        player.playerSpeed = 0;
+        player.gameObject.SetActive(false);
+        AudioManager.Instance.PlayBgm(false);
+        UIManager.Instance.winObject.SetActive(true);
+        AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
         player.dieTime = 0;
     }
     public void GameQuit()
@@ -75,4 +114,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("LobbyScene");
     }
+
+    [PunRPC]
+    private void UpdateDieTime(float newDieTime)
+    {
+        player.dieTime = newDieTime;
+    }
+
 }

@@ -1,7 +1,8 @@
+using Photon.Pun;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class ExitObject : MonoBehaviour
+public class ExitObject : MonoBehaviourPunCallbacks
 {
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -12,11 +13,21 @@ public class ExitObject : MonoBehaviour
             {
                 UIManager.Instance.coinObject.SetActive(true);
             }
-            else
+            else if(GameManager.Instance.Coincount >= 50)
             {
-                AudioManager.Instance.PlayBgm(false);
-                AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
-                UIManager.Instance.winObject.SetActive(true);
+                if(PhotonNetwork.LocalPlayer.ActorNumber == 1 &&
+                    PhotonNetwork.LocalPlayer.ActorNumber == 3 &&
+                    PhotonNetwork.LocalPlayer.ActorNumber == 4)
+                {
+                    AudioManager.Instance.PlayBgm(false);
+                    AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
+                    UIManager.Instance.winObject.SetActive(true);
+                }
+                else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+                {
+                    GameManager.Instance.LosePlayer();
+                }
+                
             }
             
         }
