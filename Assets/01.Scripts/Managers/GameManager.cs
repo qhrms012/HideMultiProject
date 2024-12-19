@@ -8,7 +8,7 @@ using Random = UnityEngine.Random;
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance = null;
-    
+
     public Player player;
 
     private bool isDead = false;
@@ -20,10 +20,11 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
-        }else if(Instance != this)
+        }
+        else if (Instance != this)
         {
             Destroy(gameObject);
         }
@@ -63,7 +64,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private void Update()
     {
-        UpdateDieTime(player.dieTime);
         if (player.dieTime >= 5f && !isDead)
         {
             HandleGameEnd(false);
@@ -116,25 +116,28 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     public void RandomMap()
     {
-        // map 배열에서 랜덤한 인덱스를 선택
-        if (map.Length > 0)
+        if (PhotonNetwork.IsMasterClient)
         {
             int randomIndex = Random.Range(0, map.Length);
-
-            // 모든 grid 요소를 비활성화한 뒤 선택된 요소만 활성화
-            foreach (GameObject map in map)
-            {
-                map.SetActive(false);
-            }
-
-            map[randomIndex].SetActive(true);
+            
+            // 모든 클라이언트에 랜덤 맵 인덱스를 전달
+            photonView.RPC("SetMap", RpcTarget.All, randomIndex);
         }
     }
     [PunRPC]
-    private void UpdateDieTime(float newDieTime)
+    private void SetMap(int index)
     {
-        player.dieTime = newDieTime;
+        // 모든 grid 요소 비활성화
+        foreach (GameObject map in map)
+        {
+            map.SetActive(false);
+        }
+
+        // 선택된 맵만 활성화
+        if (index >= 0 && index < map.Length)
+        {
+            map[index].SetActive(true);
+        }
+
     }
-
-
 }
