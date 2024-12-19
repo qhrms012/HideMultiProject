@@ -3,16 +3,19 @@ using System;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviourPunCallbacks
 {
     public static GameManager Instance = null;
-    private PhotonView pv;
     
     public Player player;
+
     private bool isDead = false;
     public int Coincount;
 
+    [SerializeField]
+    GameObject[] map;
 
 
     private void Awake()
@@ -28,11 +31,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     void Start()
     {
+        RandomMap();
         SpawnCharacter();
         Application.targetFrameRate = 60;
         AudioManager.Instance.PlayBgm(true);
         player = FindAnyObjectByType<Player>();
-        pv = GetComponent<PhotonView>();
     }
 
 
@@ -111,11 +114,27 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         SceneManager.LoadScene("LobbyScene");
     }
+    public void RandomMap()
+    {
+        // map 배열에서 랜덤한 인덱스를 선택
+        if (map.Length > 0)
+        {
+            int randomIndex = Random.Range(0, map.Length);
 
+            // 모든 grid 요소를 비활성화한 뒤 선택된 요소만 활성화
+            foreach (GameObject map in map)
+            {
+                map.SetActive(false);
+            }
+
+            map[randomIndex].SetActive(true);
+        }
+    }
     [PunRPC]
     private void UpdateDieTime(float newDieTime)
     {
         player.dieTime = newDieTime;
     }
+
 
 }
