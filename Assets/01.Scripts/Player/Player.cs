@@ -10,6 +10,7 @@ public class Player : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     private Animator animator;
     private StateMachine stateMachine;
+    private PhotonView pv;
 
     public float dieTime;
     private bool isDead = false;
@@ -22,11 +23,15 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         stateMachine = new StateMachine();
         stateMachine.SetState(new IdleState(stateMachine, animator));
+        pv = GetComponent<PhotonView>();
     }
 
     public void OnMove(InputValue value)
     {
-        playerVector = value.Get<Vector2>();
+        if (pv.IsMine)
+        {
+            playerVector = value.Get<Vector2>();
+        }       
     }
 
     private void Update() 
