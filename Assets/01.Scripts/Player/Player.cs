@@ -21,8 +21,8 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-        stateMachine = new StateMachine();
-        stateMachine.SetState(new IdleState(stateMachine, animator));
+        //stateMachine = new StateMachine();
+        //stateMachine.SetState(new IdleState(stateMachine, animator));
         pv = GetComponent<PhotonView>();
     }
 
@@ -36,12 +36,44 @@ public class Player : MonoBehaviour
 
     private void Update() 
     {
-        stateMachine.Update(playerVector);
+        //stateMachine.Update(playerVector);
         if (isHit)
         {
             dieTime += Time.deltaTime;
         }
+        if (pv.IsMine)
+        {
+            Vector2 normalizedVector = playerVector.normalized;
 
+            if (playerVector.magnitude == 0)
+            {
+                SetAnimatorParameters(false, false, false, false);
+            }
+
+            if (Mathf.Abs(normalizedVector.x) > Mathf.Abs(normalizedVector.y))
+            {
+                if (normalizedVector.x > 0)
+                    SetAnimatorParameters(true, false, false, false); // Right
+                else
+                    SetAnimatorParameters(false, true, false, false); // Left
+            }
+            else
+            {
+                if (normalizedVector.y > 0)
+                    SetAnimatorParameters(false, false, true, false); // Up
+                else if (normalizedVector.y < 0)
+                    SetAnimatorParameters(false, false, false, true); // Down
+            }
+
+        }
+    }
+
+    private void SetAnimatorParameters(bool right, bool left, bool up, bool down)
+    {
+        animator.SetBool("Right", right);
+        animator.SetBool("Left", left);
+        animator.SetBool("Up", up);
+        animator.SetBool("Down", down);
     }
 
     private void FixedUpdate()
@@ -73,5 +105,4 @@ public class Player : MonoBehaviour
             UIManager.Instance.warningText.text = "적이 근처에 있습니다.";
         }
     }
-
 }
