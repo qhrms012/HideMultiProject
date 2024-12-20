@@ -41,10 +41,10 @@ public class Player : MonoBehaviour
         {
             dieTime += Time.deltaTime;
         }
+       
+            Vector2 normalizedVector = playerVector.normalized;
         if (pv.IsMine)
         {
-            Vector2 normalizedVector = playerVector.normalized;
-
             if (playerVector.magnitude == 0)
             {
                 SetAnimatorParameters(false, false, false, false);
@@ -64,8 +64,8 @@ public class Player : MonoBehaviour
                 else if (normalizedVector.y < 0)
                     SetAnimatorParameters(false, false, false, true); // Down
             }
-
         }
+        
     }
 
     private void SetAnimatorParameters(bool right, bool left, bool up, bool down)
