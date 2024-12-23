@@ -1,5 +1,6 @@
 using Photon.Pun;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -32,36 +33,87 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     void Start()
     {
-        RandomMap();
-        SpawnCharacter();
+        RandomMap();   
         Application.targetFrameRate = 60;
         AudioManager.Instance.PlayBgm(true);
-        player = FindAnyObjectByType<Player>();
+        
         pv = GetComponent<PhotonView>();
+        if (PhotonNetwork.IsMasterClient)
+        {
+            AssignEnemyRole();
+        }
+        StartCoroutine(WaitForEnemyRole());
+
+    }
+    void AssignEnemyRole()
+    {
+        int randomPlayer = Random.Range(1, PhotonNetwork.PlayerList.Length + 1);
+        PhotonNetwork.CurrentRoom.SetCustomProperties(new ExitGames.Client.Photon.Hashtable { { "EnemyActor", randomPlayer } });
     }
 
-
+    IEnumerator WaitForEnemyRole()
+    {
+        while (!PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("EnemyActor"))
+        {
+            yield return null;
+        }
+        SpawnCharacter();
+        player = FindAnyObjectByType<Player>();
+    }
     void SpawnCharacter()
     {
-
-        // ActorNumber로 역할 분배: 1번 플레이어는 Player, 2번 플레이어는 Enemy
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+        if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("EnemyActor"))
         {
+            int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+
+            if (PhotonNetwork.LocalPlayer.ActorNumber == enemyActor)
+            {
+                PhotonNetwork.Instantiate("Enemy", new Vector3(-15, -3, -10), Quaternion.identity);
+            }
+            else
+            {
+                Vector3 spawnPos = new Vector3(0, 3, -10);
+
+                switch (PhotonNetwork.LocalPlayer.ActorNumber)
+                {
+                    case 1:
+                        spawnPos = new Vector3(0, 0, -10);
+                        break;
+                    case 3:
+                        spawnPos = new Vector3(0, 3, -10);
+                        break;
+                    case 4:
+                        spawnPos = new Vector3(3, 3, -10);
+                        break;
+                }
+
+                PhotonNetwork.Instantiate("Player", spawnPos, Quaternion.identity);
+            }
+        }
+        else
+        {
+            // EnemyActor가 설정되지 않았을 때, 기본 Player로 스폰
             PhotonNetwork.Instantiate("Player", new Vector3(0, 0, -10), Quaternion.identity);
         }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
-        {
-            PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, -10), Quaternion.identity);
-        }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
-        {
-            PhotonNetwork.Instantiate("Player", new Vector3(0, 3, -10), Quaternion.identity);
-        }
-        else if (PhotonNetwork.LocalPlayer.ActorNumber == 4)
-        {
-            PhotonNetwork.Instantiate("Player", new Vector3(3, 3, -10), Quaternion.identity);
-        }
+        //// ActorNumber로 역할 분배: 1번 플레이어는 Player, 2번 플레이어는 Enemy
+        //if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
+        //{
+        //    PhotonNetwork.Instantiate("Player", new Vector3(0, 0, -10), Quaternion.identity);
+        //}
+        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+        //{
+        //    PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, -10), Quaternion.identity);
+        //}
+        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
+        //{
+        //    PhotonNetwork.Instantiate("Player", new Vector3(0, 3, -10), Quaternion.identity);
+        //}
+        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 4)
+        //{
+        //    PhotonNetwork.Instantiate("Player", new Vector3(3, 3, -10), Quaternion.identity);
+        //}
     }
+
 
     private void Update()
     {
@@ -116,7 +168,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             photonView.RPC("HandleEnemyWin", RpcTarget.All);
         }
     }
-
+    
     Player FindPlayerByActorNumber(int actorNumber)
     {
         Player[] players = FindObjectsOfType<Player>();

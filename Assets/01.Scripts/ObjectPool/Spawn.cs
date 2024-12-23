@@ -8,9 +8,9 @@ public class Spawn : MonoBehaviour
 
     private void Start()
     {
-        Vector3 spawnAreaCenter = new Vector3(0,0,0);
-        Vector3 spawnAreaSize = new Vector3(23,30,0);
-        int spawnCount = 50;
+        Vector3 spawnAreaCenter = new Vector3(-4,0,0);
+        Vector3 spawnAreaSize = new Vector3(32,30,0);
+        int spawnCount = 60;
         for ( int i = 0;  i < spawnCount; i++)
         {
             SpawnObjectAtPosition("AI", spawnAreaCenter, spawnAreaSize);
@@ -44,7 +44,7 @@ public class Spawn : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(23, 30, 0)); // 필요 시 수정
+        Gizmos.DrawWireCube(new Vector3(-4,0,0), new Vector3(32, 30, 0)); // 필요 시 수정
     }
 }
 
