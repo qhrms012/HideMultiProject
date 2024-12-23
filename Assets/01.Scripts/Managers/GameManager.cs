@@ -95,23 +95,6 @@ public class GameManager : MonoBehaviourPunCallbacks
             // EnemyActor가 설정되지 않았을 때, 기본 Player로 스폰
             PhotonNetwork.Instantiate("Player", new Vector3(0, 0, -10), Quaternion.identity);
         }
-        //// ActorNumber로 역할 분배: 1번 플레이어는 Player, 2번 플레이어는 Enemy
-        //if (PhotonNetwork.LocalPlayer.ActorNumber == 1)
-        //{
-        //    PhotonNetwork.Instantiate("Player", new Vector3(0, 0, -10), Quaternion.identity);
-        //}
-        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
-        //{
-        //    PhotonNetwork.Instantiate("Enemy", new Vector3(5, 0, -10), Quaternion.identity);
-        //}
-        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 3)
-        //{
-        //    PhotonNetwork.Instantiate("Player", new Vector3(0, 3, -10), Quaternion.identity);
-        //}
-        //else if (PhotonNetwork.LocalPlayer.ActorNumber == 4)
-        //{
-        //    PhotonNetwork.Instantiate("Player", new Vector3(3, 3, -10), Quaternion.identity);
-        //}
     }
 
 
@@ -132,12 +115,13 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void HandleGameEnd(bool isWin)
     {
         int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
 
-        if ((actorNumber == 1 || actorNumber == 3 || actorNumber == 4) == isWin)
+        if ((actorNumber != enemyActor) == isWin)
         {
             WinPlayer();
         }
-        else if (actorNumber == 2 && !isWin)
+        else if (actorNumber == enemyActor && !isWin)
         {
             WinPlayer();
         }
@@ -150,10 +134,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     void CheckAllPlayersDead()
     {
         int alivePlayers = 0;
+        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+        Player enemyPlayer = FindPlayerByActorNumber(enemyActor);
 
         foreach (var p in PhotonNetwork.PlayerList)
         {
-            if (p.ActorNumber != 2) // Enemy 제외
+            if (p.ActorNumber != enemyActor)  // Enemy 제외
             {
                 Player playerObj = FindPlayerByActorNumber(p.ActorNumber);
                 if (playerObj != null && playerObj.gameObject.activeSelf)
@@ -163,12 +149,16 @@ public class GameManager : MonoBehaviourPunCallbacks
             }
         }
 
-        if (alivePlayers == 0)
+        if (alivePlayers == 0)  // 모든 플레이어 사망
         {
             photonView.RPC("HandleEnemyWin", RpcTarget.All);
         }
+        else if (enemyPlayer == null || !enemyPlayer.gameObject.activeSelf)  // Enemy 사망
+        {
+            photonView.RPC("HandlePlayerWin", RpcTarget.All);
+        }
     }
-    
+
     Player FindPlayerByActorNumber(int actorNumber)
     {
         Player[] players = FindObjectsOfType<Player>();
