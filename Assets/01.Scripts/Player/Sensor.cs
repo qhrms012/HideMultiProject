@@ -1,3 +1,4 @@
+using Photon.Pun;
 using System.Collections;
 using UnityEngine;
 
@@ -10,7 +11,9 @@ public class Sensor : MonoBehaviour
     {
         if (collision.CompareTag("Enemy"))
         {
-            if (!inSensor)
+            PhotonView enemyView = collision.GetComponent<PhotonView>();
+            // 적이 감지되었지만, 적이 내 캐릭터(내가 조종하는 객체)가 아닐 경우만 UI 실행
+            if (!inSensor && (enemyView == null || !enemyView.IsMine))
             {
                 inSensor = true;
                 AudioManager.Instance.PlaySfx(AudioManager.Sfx.Popup);

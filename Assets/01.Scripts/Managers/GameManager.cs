@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     private bool isDead = false;
     public int Coincount;
-
+    private PhotonView pv;
     [SerializeField]
     GameObject[] map;
 
@@ -37,6 +37,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         Application.targetFrameRate = 60;
         AudioManager.Instance.PlayBgm(true);
         player = FindAnyObjectByType<Player>();
+        pv = GetComponent<PhotonView>();
     }
 
 
@@ -69,6 +70,11 @@ public class GameManager : MonoBehaviourPunCallbacks
             HandleGameEnd(false);
         }
 
+        if (PhotonNetwork.IsMasterClient)
+        {
+            CheckAllPlayersDead();
+        }
+
     }
 
     public void HandleGameEnd(bool isWin)
@@ -79,17 +85,56 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             WinPlayer();
         }
+        else if (actorNumber == 2 && !isWin)
+        {
+            WinPlayer();
+        }
         else
         {
             LosePlayer();
         }
     }
 
+    void CheckAllPlayersDead()
+    {
+        int alivePlayers = 0;
+
+        foreach (var p in PhotonNetwork.PlayerList)
+        {
+            if (p.ActorNumber != 2) // Enemy 제외
+            {
+                Player playerObj = FindPlayerByActorNumber(p.ActorNumber);
+                if (playerObj != null && playerObj.gameObject.activeSelf)
+                {
+                    alivePlayers++;
+                }
+            }
+        }
+
+        if (alivePlayers == 0)
+        {
+            photonView.RPC("HandleEnemyWin", RpcTarget.All);
+        }
+    }
+
+    Player FindPlayerByActorNumber(int actorNumber)
+    {
+        Player[] players = FindObjectsOfType<Player>();
+        foreach (var p in players)
+        {
+            if (p.pv.Owner.ActorNumber == actorNumber)
+            {
+                return p;
+            }
+        }
+        return null;
+    }
+
     public void LosePlayer()
     {
-        isDead = true;
-        player.playerSpeed = 0;
         player.gameObject.SetActive(false);
+        isDead = true;
+        player.playerSpeed = 0;        
         AudioManager.Instance.PlayBgm(false);
         UIManager.Instance.loseObject.SetActive(true);
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Lose);
@@ -98,8 +143,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void WinPlayer()
     {
-        player.playerSpeed = 0;
         player.gameObject.SetActive(false);
+        player.playerSpeed = 0;       
         AudioManager.Instance.PlayBgm(false);
         UIManager.Instance.winObject.SetActive(true);
         AudioManager.Instance.PlaySfx(AudioManager.Sfx.Win);
@@ -119,7 +164,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         if (PhotonNetwork.IsMasterClient)
         {
             int randomIndex = Random.Range(0, map.Length);
-            
+
             // 모든 클라이언트에 랜덤 맵 인덱스를 전달
             photonView.RPC("SetMap", RpcTarget.All, randomIndex);
         }
@@ -139,5 +184,14 @@ public class GameManager : MonoBehaviourPunCallbacks
             map[index].SetActive(true);
         }
 
+    }
+
+    [PunRPC]
+    void HandleEnemyWin()
+    {
+        if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+        {
+            WinPlayer();
+        }
     }
 }
