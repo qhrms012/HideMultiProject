@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public Player player;
 
+    private bool isChecking = false;
     private bool isDead = false;
     public int Coincount;
     private PhotonView pv;
@@ -38,12 +39,17 @@ public class GameManager : MonoBehaviourPunCallbacks
         AudioManager.Instance.PlayBgm(true);
         
         pv = GetComponent<PhotonView>();
+
         if (PhotonNetwork.IsMasterClient)
         {
             AssignEnemyRole();
         }
         StartCoroutine(WaitForEnemyRole());
 
+        if (PhotonNetwork.IsMasterClient)
+        {
+            StartCoroutine(DelayedCheck());
+        }
     }
     void AssignEnemyRole()
     {
@@ -105,11 +111,16 @@ public class GameManager : MonoBehaviourPunCallbacks
             HandleGameEnd(false);
         }
 
-        if (PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient && isChecking)
         {
             CheckAllPlayersDead();
         }
 
+    }
+    private IEnumerator DelayedCheck()
+    {
+        yield return new WaitForSeconds(3f);  // 3√  µÙ∑π¿Ã
+        isChecking = true;
     }
 
     public void HandleGameEnd(bool isWin)
