@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     public TextMeshProUGUI RoomInfoText;
     public TextMeshProUGUI[] ChatText;
     public TMP_InputField ChatInput;
+    public Button GameStartBtn;
 
     [Header("ETC")]
     public TextMeshProUGUI StatusText;
@@ -39,8 +40,13 @@ public class NetworkManager : MonoBehaviourPunCallbacks
     void Start()
     {
         PhotonNetwork.AutomaticallySyncScene = true;
+
     }
 
+    public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    {
+        GameStartBtn.gameObject.SetActive(PhotonNetwork.IsMasterClient);
+    }
 
     #region 방리스트 갱신
     // ◀버튼 -2 , ▶버튼 -1 , 셀 숫자
@@ -133,6 +139,10 @@ public class NetworkManager : MonoBehaviourPunCallbacks
         RoomRenewal();
         ChatInput.text = "";
         for (int i = 0; i < ChatText.Length; i++) ChatText[i].text = "";
+        if (!PhotonNetwork.IsMasterClient)
+        {
+            GameStartBtn.gameObject.SetActive(false);
+        }
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message) { RoomInput.text = ""; CreateRoom(); }
