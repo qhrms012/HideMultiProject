@@ -162,11 +162,19 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         if (alivePlayers == 0)  // 모든 플레이어 사망
         {
-            photonView.RPC("HandleEnemyWin", RpcTarget.All);
+            pv.RPC("HandleEnemyWin", RpcTarget.All);
         }
         else if (enemyPlayer == null || !enemyPlayer.gameObject.activeSelf)  // Enemy 사망
         {
-            photonView.RPC("HandlePlayerWin", RpcTarget.All);
+            // Enemy가 마스터클라이언트인 경우에도 패배처리
+            if (PhotonNetwork.IsMasterClient && PhotonNetwork.LocalPlayer.ActorNumber == enemyActor)
+            {
+                pv.RPC("HandleEnemyWin", RpcTarget.All);
+            }
+            else
+            {
+                pv.RPC("HandlePlayerWin", RpcTarget.All);
+            }
         }
     }
 
@@ -183,9 +191,24 @@ public class GameManager : MonoBehaviourPunCallbacks
         return null;
     }
 
+    [PunRPC]
+    public void RpcSetPlayerInactive(int actorNumber)
+    {
+        Player[] players = FindObjectsOfType<Player>();
+        foreach (var p in players)
+        {
+            if (p.pv.Owner.ActorNumber == actorNumber)
+            {
+                p.gameObject.SetActive(false);
+                break;
+            }
+        }
+    }
+
     public void LosePlayer()
     {
-        player.gameObject.SetActive(false);
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        pv.RPC("RpcSetPlayerInactive", RpcTarget.All, actorNumber);  // 모든 클라이언트에서 비활성화
         isDead = true;
         player.playerSpeed = 0;        
         AudioManager.Instance.PlayBgm(false);
@@ -196,7 +219,8 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     public void WinPlayer()
     {
-        player.gameObject.SetActive(false);
+        int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
+        pv.RPC("RpcSetPlayerInactive", RpcTarget.All, actorNumber);  // 모든 클라이언트에서 비활성화
         player.playerSpeed = 0;       
         AudioManager.Instance.PlayBgm(false);
         UIManager.Instance.winObject.SetActive(true);
@@ -242,7 +266,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void HandleEnemyWin()
     {
-        if (PhotonNetwork.LocalPlayer.ActorNumber == 2)
+        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+        if (PhotonNetwork.LocalPlayer.ActorNumber == enemyActor)
         {
             WinPlayer();
         }

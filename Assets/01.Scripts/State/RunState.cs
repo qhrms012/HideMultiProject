@@ -38,6 +38,6 @@ public class RunState : Istate
 
     public void Exit()
     {
-        Debug.Log("뛰는상태 종료");
+
     }
 }

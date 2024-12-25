@@ -13,7 +13,6 @@ public class Player : MonoBehaviour
     public PhotonView pv;
 
     public float dieTime;
-    private bool isDead = false;
     public bool isHit = false;
 
     private void Awake()

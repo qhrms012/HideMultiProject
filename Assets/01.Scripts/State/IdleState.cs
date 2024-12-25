@@ -27,6 +27,6 @@ public class IdleState : Istate
 
     public void Exit()
     {
-        Debug.Log("Á¾·á");
+
     }
 }
