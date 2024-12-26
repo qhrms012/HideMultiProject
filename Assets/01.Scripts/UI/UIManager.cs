@@ -1,5 +1,7 @@
 using Photon.Pun;
+using System.Collections;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class UIManager : Singleton<UIManager>
@@ -17,11 +19,7 @@ public class UIManager : Singleton<UIManager>
 
     private void Start()
     {
-        //if (PhotonNetwork.LocalPlayer.ActorNumber == GameManager.Instance.enemyActor)
-        //{
-        //    coinObject.SetActive(false);
-        //    playerDieTimeObject.SetActive(false);
-        //}
+        StartCoroutine(WaitUI());
     }
     public void UpdateCoinUI()
     {
@@ -36,24 +34,34 @@ public class UIManager : Singleton<UIManager>
 
     public void UpdatePlayerDieTime()
     {
-        if (PhotonNetwork.LocalPlayer.ActorNumber != GameManager.Instance.enemyActor)
-        {
-            int seconds = Mathf.FloorToInt(GameManager.Instance.player.dieTime);
-            float decimals = (GameManager.Instance.player.dieTime % 1f) * 100;
-            playerDieTime.text = string.Format("{0:00} : {1:00}", seconds, Mathf.FloorToInt(decimals));
-        }
+        int seconds = Mathf.FloorToInt(GameManager.Instance.player.dieTime);
+        float decimals = (GameManager.Instance.player.dieTime % 1f) * 100;
+        playerDieTime.text = string.Format("{0:00} : {1:00}", seconds, Mathf.FloorToInt(decimals));
     }
     private void Update()
     {
-        if (GameManager.Instance.player.isHit) 
+        if (GameManager.Instance.player.isHit || 
+            PhotonNetwork.LocalPlayer.ActorNumber != GameManager.Instance.enemyActor)
         {
             UpdatePlayerDieTime();
         }
 
-        
+
     }
     private void LateUpdate()
     {
         UpdateCoinShortAgeUI();
     }
+
+    IEnumerator WaitUI()
+    {
+        yield return new WaitForSeconds(0.1f);
+        if (GameManager.Instance.enemyActor == PhotonNetwork.LocalPlayer.ActorNumber)
+        {
+            playerDieTimeObject.SetActive(false);
+
+        }
+        yield return null;
+    }
 }
+
