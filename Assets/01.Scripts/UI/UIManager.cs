@@ -1,3 +1,4 @@
+using Photon.Pun;
 using TMPro;
 using UnityEngine;
 
@@ -9,11 +10,19 @@ public class UIManager : Singleton<UIManager>
     public GameObject loseObject;
     public GameObject coinObject;
     public GameObject warningObject;
+    public GameObject playerDieTimeObject;
     public TextMeshProUGUI warningText;
     public TextMeshProUGUI coinShortAgeText;
     public TextMeshProUGUI playerDieTime;
 
-
+    private void Start()
+    {
+        //if (PhotonNetwork.LocalPlayer.ActorNumber == GameManager.Instance.enemyActor)
+        //{
+        //    coinObject.SetActive(false);
+        //    playerDieTimeObject.SetActive(false);
+        //}
+    }
     public void UpdateCoinUI()
     {
         GameManager.Instance.Coincount++;
@@ -27,9 +36,12 @@ public class UIManager : Singleton<UIManager>
 
     public void UpdatePlayerDieTime()
     {
-        int seconds = Mathf.FloorToInt(GameManager.Instance.player.dieTime);
-        float decimals = (GameManager.Instance.player.dieTime % 1f) * 100;
-        playerDieTime.text = string.Format("{0:00} : {1:00}",seconds,Mathf.FloorToInt(decimals));
+        if (PhotonNetwork.LocalPlayer.ActorNumber != GameManager.Instance.enemyActor)
+        {
+            int seconds = Mathf.FloorToInt(GameManager.Instance.player.dieTime);
+            float decimals = (GameManager.Instance.player.dieTime % 1f) * 100;
+            playerDieTime.text = string.Format("{0:00} : {1:00}", seconds, Mathf.FloorToInt(decimals));
+        }
     }
     private void Update()
     {

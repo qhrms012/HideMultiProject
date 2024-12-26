@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     private bool isChecking = false;
     private bool isDead = false;
     public int Coincount;
+    public int enemyActor;
     private PhotonView pv;
     [SerializeField]
     GameObject[] map;
@@ -70,7 +71,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.CurrentRoom.CustomProperties.ContainsKey("EnemyActor"))
         {
-            int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+            enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
 
             if (PhotonNetwork.LocalPlayer.ActorNumber == enemyActor)
             {
@@ -126,7 +127,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void HandleGameEnd(bool isWin)
     {
         int actorNumber = PhotonNetwork.LocalPlayer.ActorNumber;
-        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+        //enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
 
         if ((actorNumber != enemyActor) == isWin)
         {
@@ -145,7 +146,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     void CheckAllPlayersDead()
     {
         int alivePlayers = 0;
-        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
+        //enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
         Player enemyPlayer = FindPlayerByActorNumber(enemyActor);
 
         foreach (var p in PhotonNetwork.PlayerList)
@@ -266,7 +267,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void HandleEnemyWin()
     {
-        int enemyActor = (int)PhotonNetwork.CurrentRoom.CustomProperties["EnemyActor"];
         if (PhotonNetwork.LocalPlayer.ActorNumber == enemyActor)
         {
             WinPlayer();
