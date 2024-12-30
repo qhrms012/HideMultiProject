@@ -8,6 +8,9 @@ public class UIManager : Singleton<UIManager>
 {
 
     public TextMeshProUGUI coinText;
+    public GameObject hudPanel;
+    public GameObject survivalPanel;
+    public GameObject enemyPanel;
     public GameObject winObject;
     public GameObject loseObject;
     public GameObject coinObject;
@@ -16,6 +19,7 @@ public class UIManager : Singleton<UIManager>
     public TextMeshProUGUI warningText;
     public TextMeshProUGUI coinShortAgeText;
     public TextMeshProUGUI playerDieTime;
+
 
     private void Start()
     {
@@ -59,9 +63,44 @@ public class UIManager : Singleton<UIManager>
         if (GameManager.Instance.enemyActor == PhotonNetwork.LocalPlayer.ActorNumber)
         {
             playerDieTimeObject.SetActive(false);
-
+            enemyPanel.SetActive(true);
+            StartCoroutine(FadeOutPanel(enemyPanel, 2f));  // 2초 동안 점점 사라짐
+        }
+        else
+        {
+            survivalPanel.SetActive(true);
+            StartCoroutine(FadeOutPanel(enemyPanel, 2f));  // 2초 동안 점점 사라짐
         }
         yield return null;
     }
+    IEnumerator FadeOutPanel(GameObject panel, float duration, System.Action onComplete = null)
+    {
+        CanvasGroup canvasGroup = panel.GetComponent<CanvasGroup>();
+        if (canvasGroup == null)
+        {
+            canvasGroup = panel.AddComponent<CanvasGroup>();
+        }
+
+        float startAlpha = canvasGroup.alpha;
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            elapsedTime += Time.deltaTime;
+            canvasGroup.alpha = Mathf.Lerp(startAlpha, 0f, elapsedTime / duration);
+            yield return null;
+        }
+
+        canvasGroup.alpha = 0f;
+        panel.SetActive(false);
+
+        // HUD 패널 활성화
+        hudPanel.SetActive(true);
+
+        // 완료 콜백 실행
+        onComplete?.Invoke();
+    }
+
+
 }
 

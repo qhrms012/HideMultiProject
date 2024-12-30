@@ -13144,6 +13144,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   coinText: {fileID: 589313629}
+  hudPanel: {fileID: 1910921618}
+  survivalPanel: {fileID: 2140526815}
+  enemyPanel: {fileID: 82433704}
   winObject: {fileID: 3718835764147098020}
   loseObject: {fileID: 602100221}
   coinObject: {fileID: 205498300}
