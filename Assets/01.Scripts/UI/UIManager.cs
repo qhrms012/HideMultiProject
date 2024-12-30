@@ -8,7 +8,6 @@ public class UIManager : Singleton<UIManager>
 {
 
     public TextMeshProUGUI coinText;
-    public GameObject hudPanel;
     public GameObject survivalPanel;
     public GameObject enemyPanel;
     public GameObject winObject;
@@ -64,12 +63,12 @@ public class UIManager : Singleton<UIManager>
         {
             playerDieTimeObject.SetActive(false);
             enemyPanel.SetActive(true);
-            StartCoroutine(FadeOutPanel(enemyPanel, 2f));  // 2초 동안 점점 사라짐
+            StartCoroutine(FadeOutPanel(enemyPanel, 4f));  // 4초 동안 점점 사라짐
         }
         else
         {
             survivalPanel.SetActive(true);
-            StartCoroutine(FadeOutPanel(enemyPanel, 2f));  // 2초 동안 점점 사라짐
+            StartCoroutine(FadeOutPanel(survivalPanel, 4f));  // 4초 동안 점점 사라짐
         }
         yield return null;
     }
@@ -95,7 +94,7 @@ public class UIManager : Singleton<UIManager>
         panel.SetActive(false);
 
         // HUD 패널 활성화
-        hudPanel.SetActive(true);
+        //hudPanel.SetActive(true);
 
         // 완료 콜백 실행
         onComplete?.Invoke();
